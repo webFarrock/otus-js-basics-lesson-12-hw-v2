@@ -1,0 +1,9 @@
+.form-control.form-control--search-input{
+    display: inline-block;
+    width: 75%
+}
+
+.list-group.list-group--search-history{}
+.list-group.list-group--search-history .list-group-item{
+    cursor: pointer;
+}
