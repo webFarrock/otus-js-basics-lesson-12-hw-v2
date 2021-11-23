@@ -2,6 +2,7 @@ import { getCurrentCity } from "./services/city";
 import { createMapImage } from "./services/map";
 import { getSearchHistory, updateHistory } from "./storage/localStorage";
 import { createDiv, createH2, createSpinner } from "./tools/html";
+import { getWeather } from "./services/weather";
 
 const SEARCH_INPUT_ELEM_ID = "search-input";
 const SEARCH_SUBMIT_ELEM_ID = "search-submit";
@@ -91,9 +92,12 @@ const initApp = async (appEl) => {
   buildMarkup(appEl);
   const currentCity = await getCurrentCity();
   console.log("currentCity: ", currentCity);
-  const mapImage = await createMapImage(currentCity);
 
+  const mapImage = await createMapImage(currentCity);
   console.log("map: ", mapImage);
+
+  const weather = await getWeather(currentCity);
+  console.log("weather: ", weather);
 
   const historyData = getSearchHistory();
   const cityData = getCurrentCity();

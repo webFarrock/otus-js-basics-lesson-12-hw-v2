@@ -19,8 +19,8 @@ const getCityNameByCoords = async (lat, lng) => {
   try {
     const result = await geocoderApiInstance.get(`/?geocode=${lat},${lng}`);
     return result.data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.name || null;
-  } catch (error) {
-    console.warn("Error while define user city. Use default city", error);
+  } catch (e) {
+    console.warn("Error while define user city. Use default city", e);
     return null;
   }
 };
