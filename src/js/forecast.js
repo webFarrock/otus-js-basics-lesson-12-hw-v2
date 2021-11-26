@@ -1,13 +1,14 @@
 import { getCurrentCity } from "./services/city";
 import { createMapImage } from "./services/map";
-import { getSearchHistory, updateHistory } from "./storage/localStorage";
-import { createDiv, createH2, createSpinner } from "./tools/html";
+import { addToHistory, getSearchHistory } from "./storage/localStorage";
+import { createDiv, createH2, createH6, getById } from "./tools/html";
 import { getWeather } from "./services/weather";
 
 const SEARCH_INPUT_ELEM_ID = "search-input";
 const SEARCH_SUBMIT_ELEM_ID = "search-submit";
 const HISTORY_CONTAINER_ELEM_ID = "search-history";
 const MAP_CONTAINER_ELEM_ID = "map-container";
+const WEATHER_RESULT = "weather-result";
 
 /**
  * @return {HTMLDivElement}
@@ -18,10 +19,11 @@ const buildMapBlock = () => {
   const mapContainer = createDiv();
   mapContainer.id = MAP_CONTAINER_ELEM_ID;
 
-  const spinnerEl = createSpinner();
+  const weatherResult = createDiv();
+  weatherResult.id = WEATHER_RESULT;
 
-  mapContainer.appendChild(spinnerEl);
   mapBlockCol.appendChild(mapHeader);
+  mapBlockCol.appendChild(weatherResult);
   mapBlockCol.appendChild(mapContainer);
 
   return mapBlockCol;
@@ -44,13 +46,11 @@ const buildSearchBlock = () => {
   searchSubmit.classList.add(..."btn btn-primary float-end".split(" "));
   searchSubmit.type = "submit";
   searchSubmit.id = SEARCH_SUBMIT_ELEM_ID;
+  searchSubmit.disabled = true;
 
   const historyContainer = createDiv("list-group list-group--search-history");
   historyContainer.id = HISTORY_CONTAINER_ELEM_ID;
 
-  const spinnerEl = createSpinner();
-
-  historyContainer.appendChild(spinnerEl);
   searchBlockCol.appendChild(searchHeader);
   searchColEl.appendChild(searchInput);
   searchColEl.appendChild(searchSubmit);
@@ -71,38 +71,138 @@ const buildMarkup = (appEl) => {
   appContainer.innerHTML = "";
   appContainer.appendChild(searchBlock);
   appContainer.appendChild(mapBlock);
-
-  updateHistory(); // tmp
 };
 
-const applyForecastData = (data = {}) => {
-  console.log("applyForecastData", data);
+/**
+ * @return {HTMLElement}
+ */
+const getHistoryContainer = () => {
+  return getById(HISTORY_CONTAINER_ELEM_ID);
 };
 
-const applyCityData = (data = {}) => {
-  console.log("applyCityData", data);
+/**
+ * @return {HTMLElement}
+ */
+const getMapContainer = () => {
+  return getById(MAP_CONTAINER_ELEM_ID);
 };
 
-const applyAppData = (cityData = {}, forecastData = {}) => {
-  applyCityData(cityData);
-  applyForecastData(forecastData);
+/**
+ * @return {HTMLElement}
+ */
+const getWeatherResultBLock = () => {
+  return getById(WEATHER_RESULT);
+};
+
+/**
+ * @return {HTMLElement}
+ */
+const getSearchBtn = () => {
+  return getById(SEARCH_SUBMIT_ELEM_ID);
+};
+
+/**
+ * @return {HTMLElement}
+ */
+const getSearchInput = () => {
+  return getById(SEARCH_INPUT_ELEM_ID);
+};
+
+const enableSearchBtn = () => {
+  getSearchBtn().disabled = false;
+};
+
+const disableSearchBtn = () => {
+  getSearchBtn().disabled = true;
+};
+
+const renderWeather = (weatherData) => {
+  const weatherResultBlock = getWeatherResultBLock();
+  const { name } = weatherData;
+  const { description, icon, main } = weatherData.weather[0];
+  const iconImg = document.createElement("img");
+  iconImg.src = `//openweathermap.org/img/wn/${icon}@2x.png`;
+
+  weatherResultBlock.innerText = [name, main, description].join(", ");
+  weatherResultBlock.appendChild(iconImg);
+};
+
+const renderMap = ({ lat, lon }) => {
+  const img = createMapImage(lat, lon);
+  const mapContainer = getMapContainer();
+  mapContainer.appendChild(img);
+};
+
+const renderHistory = (history) => {
+  const historyContainer = getHistoryContainer();
+  historyContainer.innerHTML = "";
+  const listGroupItems = history.map((city) => {
+    const listGroupItem = createDiv("list-group-item list-group-item-action d-flex gap-3 py-3");
+    const listGroupItemIn = createDiv("d-flex gap-2 w-100 justify-content-between");
+    const header = createH6(city, "mb-0");
+
+    listGroupItemIn.appendChild(header);
+    listGroupItem.appendChild(listGroupItemIn);
+
+    return listGroupItem;
+  });
+
+  listGroupItems.forEach((item) => {
+    historyContainer.appendChild(item);
+  });
+};
+
+const updateWeather = async (cityName) => {
+  const weather = await getWeather(cityName);
+  if (!weather) {
+    alert(`Погода для "${cityName}" не найдена`);
+    return false;
+  }
+
+  const mapContainer = getMapContainer();
+  mapContainer.innerHTML = "";
+  renderWeather(weather);
+  renderMap(weather.coord);
+
+  return true;
+};
+
+const initEventListeners = () => {
+  const searchInput = getSearchInput();
+
+  searchInput.addEventListener("input", (e) => {
+    if (e.target.value.trim()) {
+      enableSearchBtn();
+    } else {
+      disableSearchBtn();
+    }
+  });
+
+  const searchBtn = getSearchBtn();
+  searchBtn.addEventListener("click", () => {
+    const input = getSearchInput();
+    const cityName = input.value;
+    const find = updateWeather(cityName);
+
+    if (find) {
+      addToHistory(cityName);
+      const history = getSearchHistory();
+      renderHistory(history);
+    }
+
+    input.value = "";
+  });
 };
 
 const initApp = async (appEl) => {
   buildMarkup(appEl);
   const currentCity = await getCurrentCity();
-  console.log("currentCity: ", currentCity);
 
-  const mapImage = await createMapImage(currentCity);
-  console.log("map: ", mapImage);
+  initEventListeners();
+  updateWeather("Москва");
 
-  const weather = await getWeather(currentCity);
-  console.log("weather: ", weather);
-
-  const historyData = getSearchHistory();
-  const cityData = getCurrentCity();
-  const forecastData = {};
-  applyAppData(cityData, forecastData, historyData);
+  const history = getSearchHistory();
+  renderHistory(history);
 };
 
 export { initApp };
