@@ -9,6 +9,7 @@ const SEARCH_SUBMIT_ELEM_ID = "search-submit";
 const HISTORY_CONTAINER_ELEM_ID = "search-history";
 const MAP_CONTAINER_ELEM_ID = "map-container";
 const WEATHER_RESULT = "weather-result";
+const HISTORY_CITY_NAME = "js-history-city-name";
 
 /**
  * @return {HTMLDivElement}
@@ -63,6 +64,9 @@ const buildSearchBlock = () => {
   return searchBlockCol;
 };
 
+/**
+ * @param {HTMLElement} appEl
+ */
 const buildMarkup = (appEl) => {
   const appContainer = appEl;
   const searchBlock = buildSearchBlock();
@@ -139,7 +143,7 @@ const renderHistory = (history) => {
   const listGroupItems = history.map((city) => {
     const listGroupItem = createDiv("list-group-item list-group-item-action d-flex gap-3 py-3");
     const listGroupItemIn = createDiv("d-flex gap-2 w-100 justify-content-between");
-    const header = createH6(city, "mb-0");
+    const header = createH6(city, `mb-0 ${HISTORY_CITY_NAME}`);
 
     listGroupItemIn.appendChild(header);
     listGroupItem.appendChild(listGroupItemIn);
@@ -191,6 +195,27 @@ const initEventListeners = () => {
     }
 
     input.value = "";
+  });
+
+  const historyContainer = getHistoryContainer();
+
+  historyContainer.addEventListener("click", (e) => {
+    let cityName = null;
+    if (e.target.classList.contains(HISTORY_CITY_NAME)) {
+      cityName = e.target.innerText;
+    } else {
+      const cityElem = e.target.querySelector(`.${HISTORY_CITY_NAME}`);
+      if (cityElem) {
+        cityName = cityElem.innerText;
+      }
+    }
+
+    if (cityName) {
+      updateWeather(cityName);
+      addToHistory(cityName);
+      const history = getSearchHistory();
+      renderHistory(history);
+    }
   });
 };
 
