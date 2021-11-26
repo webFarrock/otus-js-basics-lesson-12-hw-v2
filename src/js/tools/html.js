@@ -23,11 +23,28 @@ const createH2 = (text) => {
 };
 
 /**
- * @return {HTMLDivElement}
+ * @param {String} text
+ * @param {String} elClasses
+ * @return {HTMLInputElement}
  */
-const createSpinner = () => {
-  const spinnerEl = createDiv("spinner-border");
-  return spinnerEl;
+const createH6 = (text, elClasses = "") => {
+  const h6 = document.createElement("h6");
+
+  if (elClasses) {
+    h6.classList.add(...elClasses.split(" "));
+  }
+
+  h6.innerText = text;
+  return h6;
 };
 
-export { createH2, createDiv, createSpinner };
+const getById = (id) => {
+  const elem = document.getElementById(id);
+  if (!elem) {
+    throw new Error(`can't find element with id="${id}"`);
+  }
+
+  return elem;
+};
+
+export { createH2, createH6, createDiv, getById };
