@@ -9,6 +9,10 @@ const weatherApiInstance = axios.create({
   },
 });
 
+/**
+ * @param {String} cityName
+ * @return {Promise<null|any>}
+ */
 const getWeather = async (cityName) => {
   try {
     const result = await weatherApiInstance.get(`?q=${cityName}`);
