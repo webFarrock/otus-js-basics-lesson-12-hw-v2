@@ -1,5 +1,6 @@
 import { createDiv, createH2, createH6, getById } from "../tools/html";
 import { createMapImage } from "./map";
+import { createIconImage } from "./weather";
 
 const SEARCH_INPUT_ELEM_ID = "search-input";
 const SEARCH_SUBMIT_ELEM_ID = "search-submit";
@@ -135,11 +136,10 @@ const renderHistory = (history) => {
     historyContainer.appendChild(item);
   });
 };
+
 const renderWeather = (name, description, icon, main) => {
   const weatherResultBlock = getWeatherResultBLock();
-
-  const iconImg = document.createElement("img");
-  iconImg.src = `//openweathermap.org/img/wn/${icon}@2x.png`;
+  const iconImg = createIconImage(icon);
 
   weatherResultBlock.innerText = [name, main, description].join(", ");
   weatherResultBlock.appendChild(iconImg);

@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_KEY = "b7b153f94047fd58f7ac795cd03608df";
+const ICON_BASE_PATH = "//openweathermap.org/img/wn/";
 
 const weatherApiInstance = axios.create({
   baseURL: "//api.openweathermap.org/data/2.5/weather",
@@ -23,4 +24,14 @@ const getWeather = async (cityName) => {
   }
 };
 
-export { getWeather };
+/**
+ * @param {String} icon
+ * @return {HTMLImageElement}
+ */
+const createIconImage = (icon) => {
+  const iconImg = document.createElement("img");
+  iconImg.src = `${ICON_BASE_PATH}${icon}@2x.png`;
+  return iconImg;
+};
+
+export { getWeather, createIconImage };
