@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "build": "webpack build --node-env production",
     "dev": "webpack serve --open",
     "lint": "eslint .",
