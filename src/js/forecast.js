@@ -82,13 +82,13 @@ const initEventListeners = () => {
 
 const initApp = async (appEl) => {
   buildMarkup(appEl);
-  const currentCity = await getCurrentCity();
-
   initEventListeners();
-  updateWeather("Москва");
 
   const history = getSearchHistory();
   renderHistory(history);
+
+  const currentCity = await getCurrentCity();
+  updateWeather(currentCity);
 };
 
 export { initApp };
