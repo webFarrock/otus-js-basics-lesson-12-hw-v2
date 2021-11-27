@@ -141,6 +141,7 @@ const renderWeather = (name, description, icon, main) => {
   const weatherResultBlock = getWeatherResultBLock();
   const iconImg = createIconImage(icon);
 
+  weatherResultBlock.innerHTML = "";
   weatherResultBlock.innerText = [name, main, description].join(", ");
   weatherResultBlock.appendChild(iconImg);
 };

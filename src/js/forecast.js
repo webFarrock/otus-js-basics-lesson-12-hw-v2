@@ -55,12 +55,13 @@ const initEventListeners = () => {
       renderHistory(history);
     }
 
+    disableSearchBtn();
     input.value = "";
   });
 
   const historyContainer = getHistoryContainer();
 
-  historyContainer.addEventListener("click", (e) => {
+  historyContainer.addEventListener("click", async (e) => {
     let cityName = null;
     if (e.target.classList.contains(HISTORY_CITY_NAME)) {
       cityName = e.target.innerText;
@@ -72,7 +73,7 @@ const initEventListeners = () => {
     }
 
     if (cityName) {
-      updateWeather(cityName);
+      await updateWeather(cityName);
       addToHistory(cityName);
       const history = getSearchHistory();
       renderHistory(history);
@@ -88,7 +89,7 @@ const initApp = async (appEl) => {
   renderHistory(history);
 
   const currentCity = await getCurrentCity();
-  updateWeather(currentCity);
+  await updateWeather(currentCity);
 };
 
 export { initApp };
