@@ -22,4 +22,4 @@ const addToHistory = (cityName) => {
   localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(newHistory));
 };
 
-export { getSearchHistory, addToHistory };
+export { getSearchHistory, addToHistory, HISTORY_MAX_SIZE };
