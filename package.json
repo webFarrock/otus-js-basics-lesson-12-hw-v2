@@ -6,7 +6,6 @@
   "scripts": {
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "test:coverage:ci": "jest --ci --coverage && codecov",
     "build": "webpack build --node-env production",
     "dev": "webpack serve --open",
     "lint": "eslint .",
