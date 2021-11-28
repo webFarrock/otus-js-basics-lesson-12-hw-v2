@@ -3,7 +3,7 @@ name: PR Sanity Check
 on: pull_request
 
 jobs:
-  deploy-to-gh-pages:
+  list:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
