@@ -1,6 +1,7 @@
 # Домашнее задание курса OTUS JS Basics
 
-[![GitHub Super-Linter](https://github.com/webFarrock/otus-js-basics-lesson-12-hw-v2/workflows/PR%20Sanity%20Check/badge.svg)](https://github.com/marketplace/actions/super-linter)
+[![GitHub Super-Linter](https://github.com/webFarrock/otus-js-basics-lesson-12-hw-v2/workflows/pr-sanity-check/badge.svg)](https://github.com/marketplace/actions/super-linter)
+
 [![codecov](https://codecov.io/gh/webFarrock/otus-js-basics-lesson-12-hw-v2/branch/task/graph/badge.svg?token=Z1T1I4KL8Y)](https://codecov.io/gh/webFarrock/otus-js-basics-lesson-12-hw-v2)
 
 Демо: [https://webfarrock.github.io/otus-js-basics-lesson-12-hw-v2/](https://webfarrock.github.io/otus-js-basics-lesson-12-hw-v2/)
