@@ -1,5 +1,7 @@
 # Домашнее задание курса OTUS JS Basics
 
+[![codecov](https://codecov.io/gh/webFarrock/otus-js-basics-lesson-12-hw-v2/branch/task/graph/badge.svg?token=Z1T1I4KL8Y)](https://codecov.io/gh/webFarrock/otus-js-basics-lesson-12-hw-v2)
+
 Демо: [https://webfarrock.github.io/otus-js-basics-lesson-12-hw-v2/](https://webfarrock.github.io/otus-js-basics-lesson-12-hw-v2/)
 
 При первом открытии пользователю показывается текущий город на основе геолокации браузера.
