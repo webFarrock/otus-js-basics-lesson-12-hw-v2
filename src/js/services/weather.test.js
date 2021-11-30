@@ -1,5 +1,7 @@
-import { createIconImage } from "./weather";
-import { getWeather } from "../__mocks__/getWeather";
+import axios from "axios";
+import { API_KEY, createIconImage, getWeather, WEATHER_BASE_URL } from "./weather";
+
+jest.mock("axios");
 
 describe("weather", () => {
   it("createIconImage", () => {
@@ -11,13 +13,21 @@ describe("weather", () => {
     expect(elem.src).toContain(iconId);
   });
 
-  it("getWeather success", async () => {
-    const result = await getWeather("London");
-    expect(result).toBeTruthy();
-  });
+  it("getWeather", async () => {
+    const resp = { data: { fake: "fake" } };
+    const cityName = "London";
 
-  it("getWeather fail", async () => {
-    const result = await getWeather("fake");
-    expect(result).toBeNull();
+    axios.get.mockResolvedValue(resp);
+
+    const result = await getWeather(cityName);
+    expect(result).toBeTruthy();
+
+    expect(axios.get).toHaveBeenCalledWith("", {
+      baseURL: WEATHER_BASE_URL,
+      params: {
+        q: cityName,
+        apikey: API_KEY,
+      },
+    });
   });
 });

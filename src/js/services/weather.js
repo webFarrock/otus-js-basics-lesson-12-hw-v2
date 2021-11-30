@@ -1,14 +1,8 @@
 import axios from "axios";
 
 const API_KEY = "b7b153f94047fd58f7ac795cd03608df";
+const WEATHER_BASE_URL = "//api.openweathermap.org/data/2.5/weather";
 const ICON_BASE_PATH = "//openweathermap.org/img/wn/";
-
-const weatherApiInstance = axios.create({
-  baseURL: "//api.openweathermap.org/data/2.5/weather",
-  params: {
-    apikey: API_KEY,
-  },
-});
 
 /**
  * @param {String} cityName
@@ -16,7 +10,13 @@ const weatherApiInstance = axios.create({
  */
 const getWeather = async (cityName) => {
   try {
-    const result = await weatherApiInstance.get(`?q=${cityName}`);
+    const result = await axios.get("", {
+      baseURL: WEATHER_BASE_URL,
+      params: {
+        q: cityName,
+        apikey: API_KEY,
+      },
+    });
     return result.data;
   } catch (e) {
     console.warn(`Error while fetch weather for city "${cityName}"`, e);
@@ -34,4 +34,4 @@ const createIconImage = (icon) => {
   return iconImg;
 };
 
-export { getWeather, createIconImage };
+export { getWeather, createIconImage, API_KEY, WEATHER_BASE_URL };
