@@ -188,9 +188,9 @@ describe("forecast init app", () => {
     btn.dispatchEvent(new Event("click"));
 
     await new Promise((resolve) => {
-      process.nextTick(() => {
+      setTimeout(() => {
         resolve();
-      });
+      }, 100);
     });
 
     expect(input.value).toBeFalsy();
@@ -216,9 +216,9 @@ describe("forecast init app", () => {
     btn.dispatchEvent(new Event("click"));
 
     await new Promise((resolve) => {
-      process.nextTick(() => {
+      setTimeout(() => {
         resolve();
-      });
+      }, 100);
     });
 
     const historyContainer = getHistoryContainer();
