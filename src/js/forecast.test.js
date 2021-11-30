@@ -7,26 +7,123 @@ import {
   getWeatherResultBLock,
 } from "./services/markup";
 
-import { weatherMockData } from "./__mocks__/getWeather";
+const weatherMockData = {
+  London: {
+    coord: {
+      lon: -0.1257,
+      lat: 51.5085,
+    },
+    weather: [
+      {
+        id: 500,
+        main: "Rain",
+        description: "light rain",
+        icon: "10n",
+      },
+    ],
+    base: "stations",
+    main: {
+      temp: 276.68,
+      feels_like: 271.51,
+      temp_min: 274.64,
+      temp_max: 277.4,
+      pressure: 982,
+      humidity: 81,
+    },
+    visibility: 7000,
+    wind: {
+      speed: 7.72,
+      deg: 300,
+      gust: 12.86,
+    },
+    rain: {
+      "1h": 0.82,
+    },
+    clouds: {
+      all: 90,
+    },
+    dt: 1637985504,
+    sys: {
+      type: 1,
+      id: 1414,
+      country: "GB",
+      sunrise: 1637998702,
+      sunset: 1638028701,
+    },
+    timezone: 0,
+    id: 2643743,
+    name: "London",
+    cod: 200,
+  },
+  Amsterdam: {
+    coord: {
+      lon: 20,
+      lat: 30,
+    },
+    weather: [
+      {
+        id: 500,
+        main: "Sunny",
+        description: "Bright sun",
+        icon: "25n",
+      },
+    ],
+    base: "stations",
+    main: {
+      temp: 276.68,
+      feels_like: 271.51,
+      temp_min: 274.64,
+      temp_max: 277.4,
+      pressure: 982,
+      humidity: 81,
+    },
+    visibility: 7000,
+    wind: {
+      speed: 7.72,
+      deg: 300,
+      gust: 12.86,
+    },
+    rain: {
+      "1h": 0.82,
+    },
+    clouds: {
+      all: 90,
+    },
+    dt: 1637985504,
+    sys: {
+      type: 1,
+      id: 1414,
+      country: "GB",
+      sunrise: 1637998702,
+      sunset: 1638028701,
+    },
+    timezone: 0,
+    id: 2643743,
+    name: "Amsterdam",
+    cod: 200,
+  },
+};
+
+jest.mock("axios");
 
 jest.mock("./services/city", () => {
-  const { getCurrentCity } = jest.requireActual("./__mocks__/getCurrentCity");
   return {
     __esModule: true,
-    getCurrentCity: async () => {
-      return getCurrentCity();
+    getCurrentCity: () => {
+      return "London";
     },
   };
 });
 
 jest.mock("./services/weather", () => {
-  const { getWeather } = jest.requireActual("./__mocks__/getWeather");
   const { createIconImage } = jest.requireActual("./services/weather");
   return {
     __esModule: true,
     createIconImage,
-    getWeather: async (cityName) => {
-      return getWeather(cityName);
+    getWeather: (cityName) => {
+      return new Promise((resolve, reject) => {
+        return weatherMockData[cityName] ? resolve(weatherMockData[cityName]) : reject(new Error("weather not found"));
+      });
     },
   };
 });
